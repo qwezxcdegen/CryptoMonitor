@@ -45,7 +45,9 @@ class NetworkManager {
             }
             
             if let coins = parseJSON(CoinData.self, fromData: data) {
-                completion(.success(coins.coins))
+                DispatchQueue.main.async {
+                    completion(.success(coins.coins))
+                }
             } else {
                 completion(.failure(.decodeError))
             }
