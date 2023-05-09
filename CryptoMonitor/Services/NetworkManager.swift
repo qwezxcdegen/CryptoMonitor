@@ -46,7 +46,7 @@ class NetworkManager {
             
             if let parsedData = parseJSON(type.self, fromData: data) {
                 DispatchQueue.main.async {
-                    completion(.success(parsedDataç))
+                    completion(.success(parsedData))
                 }
             } else {
                 completion(.failure(.decodeError))
