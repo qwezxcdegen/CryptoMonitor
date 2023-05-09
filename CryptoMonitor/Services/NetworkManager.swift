@@ -31,7 +31,7 @@ class NetworkManager {
         }
     }
     
-    func fetch<T: Decodable>(_ type: T.Type, url: String, completion: @escaping (Result<T, NetworkError>) -> Void) {
+    func fetch<T: Decodable>(withModel type: T.Type, url: String, completion: @escaping (Result<T, NetworkError>) -> Void) {
         guard let url = URL(string: url) else {
             completion(.failure(.brokenURL))
             return
