@@ -46,7 +46,7 @@ class NetworkManager {
             
             if let parsedData = parseJSON(type.self, fromData: data) {
                 DispatchQueue.main.async {
-                    completion(.success(parsedData))
+                    completion(.success(parsedDataç))
                 }
             } else {
                 completion(.failure(.decodeError))
@@ -59,8 +59,8 @@ class NetworkManager {
     private func parseJSON<T: Decodable>(_ type: T.Type, fromData data: Data) -> T? {
         let decoder = JSONDecoder()
         do {
-            let convertedData = try decoder.decode(type.self, from: data)
-            return convertedData
+            let decodedData = try decoder.decode(type.self, from: data)
+            return decodedData
         } catch {
             print(error.localizedDescription)
         }
