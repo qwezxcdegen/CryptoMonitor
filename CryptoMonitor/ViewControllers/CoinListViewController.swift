@@ -47,7 +47,6 @@ private extension CoinListViewController {
             case .success(let coinsData):
                 coinsData.coins.forEach { self?.coins.append($0) }
                 self?.tableView.reloadData()
-                
             case .failure(let failure):
                 print(failure.localizedDescription)
             }
