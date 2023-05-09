@@ -42,12 +42,10 @@ class CoinListViewController: UITableViewController {
 // MARK: - Fetch Methods
 private extension CoinListViewController {
     func fetchCoins() {
-        networkManager.fetchCoins { [weak self] result in
+        networkManager.fetch(CoinData.self, url: coinsURL) { [weak self] result in
             switch result {
             case .success(let coinsData):
-                coinsData.forEach {
-                    self?.coins.append($0)
-                }
+                coinsData.coins.forEach { self?.coins.append($0) }
                 self?.tableView.reloadData()
                 
             case .failure(let failure):

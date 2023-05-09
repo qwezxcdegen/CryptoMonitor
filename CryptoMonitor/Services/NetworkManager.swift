@@ -31,8 +31,8 @@ class NetworkManager {
         }
     }
     
-    func fetchCoins(completion: @escaping (Result<[Coin], NetworkError>) -> Void) {
-        guard let url = URL(string: coinsURL) else {
+    func fetch<T: Decodable>(_ type: T.Type, url: String, completion: @escaping (Result<T, NetworkError>) -> Void) {
+        guard let url = URL(string: url) else {
             completion(.failure(.brokenURL))
             return
         }
@@ -44,9 +44,9 @@ class NetworkManager {
                 return
             }
             
-            if let coins = parseJSON(CoinData.self, fromData: data) {
+            if let parsedData = parseJSON(type.self, fromData: data) {
                 DispatchQueue.main.async {
-                    completion(.success(coins.coins))
+                    completion(.success(parsedData))
                 }
             } else {
                 completion(.failure(.decodeError))
