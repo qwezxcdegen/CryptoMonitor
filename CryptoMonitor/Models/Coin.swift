@@ -9,11 +9,23 @@ import Foundation
 
 struct CoinData: Decodable {
     let coins: [Coin]
+    
+    init(coins: [Coin]) {
+        self.coins = coins
+    }
+    
+    init(from data: [String: [Any]]) {
+        guard let data = data["coins"] as? [[String: Any]] else {
+            coins = []
+            return
+        }
+        coins = data.map { Coin(from: $0) }
+    }
 }
 
 struct Coin: Decodable {
     let id: String
-    let icon: URL
+    let icon: String
     let name: String
     let symbol: String
     let rank: Int
@@ -21,6 +33,30 @@ struct Coin: Decodable {
     let volume: Double
     let marketCap: Double
     let priceChange1d: Double
+    
+    init(id: String, icon: String, name: String, symbol: String, rank: Int, price: Double, volume: Double, marketCap: Double, priceChange1d: Double) {
+        self.id = id
+        self.icon = icon
+        self.name = name
+        self.symbol = symbol
+        self.rank = rank
+        self.price = price
+        self.volume = volume
+        self.marketCap = marketCap
+        self.priceChange1d = priceChange1d
+    }
+    
+    init(from coinData: [String: Any]) {
+        id = coinData["id"] as? String ?? ""
+        icon = coinData["icon"] as? String ?? ""
+        name = coinData["name"] as? String ?? ""
+        symbol = coinData["symbol"] as? String ?? ""
+        rank = coinData["rank"] as? Int ?? 0
+        price = coinData["price"] as? Double ?? 0
+        volume = coinData["volume"] as? Double ?? 0
+        marketCap = coinData["marketCap"] as? Double ?? 0
+        priceChange1d = coinData["priceChange1d"] as? Double ?? 0
+    }
 }
 
 /*

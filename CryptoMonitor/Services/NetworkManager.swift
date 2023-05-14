@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 enum NetworkError: Error {
     case brokenURL
@@ -19,7 +20,11 @@ class NetworkManager {
     
     private init () {}
     
-    func fetchImage(from url: URL, completion: @escaping (Result<Data, NetworkError>) -> Void) {
+    func fetchImage(from url: String, completion: @escaping (Result<Data, NetworkError>) -> Void) {
+        guard let url = URL(string: url) else {
+            completion(.failure(.brokenURL))
+            return
+        }
         DispatchQueue.global().async {
             guard let imageData = try? Data(contentsOf: url) else {
                 completion(.failure(.dataError))
@@ -53,6 +58,24 @@ class NetworkManager {
             }
             
         }.resume()
+    }
+    
+    func fetchCoins(completion: @escaping (Result<[Coin], NetworkError>) -> Void) {
+        AF.request(coinsURL)
+            .validate()
+            .responseJSON { dataResponse in
+                switch dataResponse.result {
+                case .success(let value):
+                    guard let value = value as? [String: [Any]] else {
+                        completion(.failure(.dataError))
+                        return
+                    }
+                    completion(.success(CoinData(from: value).coins))
+                case .failure(_):
+                    completion(.failure(.dataError))
+                }
+            }
+        
     }
     
     

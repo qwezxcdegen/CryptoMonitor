@@ -16,7 +16,7 @@ class CoinListViewController: UITableViewController {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchCoins()
+        fetchCoinsWithAF()
     }
     
     // MARK: - UITableViewDataSource
@@ -49,6 +49,18 @@ private extension CoinListViewController {
                 self?.tableView.reloadData()
             case .failure(let failure):
                 print(failure.localizedDescription)
+            }
+        }
+    }
+    
+    func fetchCoinsWithAF() {
+        networkManager.fetchCoins { [weak self] result in
+            switch result {
+            case .success(let fetchedCoins):
+                self?.coins.append(contentsOf: fetchedCoins)
+                self?.tableView.reloadData()
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
     }
